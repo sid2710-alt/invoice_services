@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wigo.net.invoice_services.exception.ResourceNotFoundException;
 import com.wigo.net.invoice_services.model.Invoice;
 import com.wigo.net.invoice_services.repository.InvoiceRepository;
 
@@ -40,9 +41,9 @@ public class InvoiceController {
 
     // Create a new invoice
     @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
+    public ResponseEntity<String> createInvoice(@RequestBody Invoice invoice) {
         Invoice savedInvoice = invoiceRepository.save(invoice);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedInvoice); // HTTP 201 Created with body
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedInvoice.getId().toString()); // HTTP 201 Created with body
     }
 
     // Update an invoice
@@ -68,11 +69,5 @@ public class InvoiceController {
         
         invoiceRepository.delete(invoice);
         return ResponseEntity.noContent().build(); // HTTP 204 No Content
-    }
-
-    private static class ResourceNotFoundException extends Invoice {
-
-        public ResourceNotFoundException(String string) {
-        }
     }
 }
