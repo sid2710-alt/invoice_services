@@ -15,34 +15,47 @@ import com.wigo.net.invoice_services.repository.InvoiceRepository;
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-    private final InvoiceMapper invoiceMapper;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, InvoiceMapper invoiceMapper) {
+    public InvoiceService(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.invoiceMapper = invoiceMapper;
     }
 
   
-    public InvoiceDto createInvoice(InvoiceDto invoiceDto) {
-        Invoice invoice = invoiceMapper.toEntity(invoiceDto);
+    public Long createInvoice(InvoiceDto invoiceDto) {
+        Invoice invoice = InvoiceMapper.toEntity(invoiceDto);
         Invoice savedInvoice = invoiceRepository.save(invoice);
-        return invoiceMapper.toDto(savedInvoice);
+        return savedInvoice.getId();
+    }
+
+    public Long updateInvoice(Long id, InvoiceDto updatedInvoiceDto) {
+        Invoice existingInvoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with ID: " + id));
+                Invoice updatedInvoice = InvoiceMapper.toEntity(updatedInvoiceDto);
+        
+        existingInvoice.setClientName(updatedInvoice.getClientName());
+        existingInvoice.setDate(updatedInvoice.getDate());
+        existingInvoice.setItems(updatedInvoice.getItems());
+        existingInvoice.setTotalAmount(updatedInvoice.getTotalAmount());
+
+        Invoice savedInvoice = invoiceRepository.save(existingInvoice);
+        return savedInvoice.getId();
     }
 
     public List<InvoiceDto> getAllInvoices() {
         List<Invoice> invoices = invoiceRepository.findAll();
         return invoices.stream()
-                .map(invoiceMapper::toDto)
+                .map(InvoiceMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public InvoiceDto getInvoiceById(String id) {
+    public InvoiceDto getInvoiceById(Long id) {
         Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with id: " + id));
-        return invoiceMapper.toDto(invoice);
+        .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with id: " + id)) ;
+                
+        return InvoiceMapper.toDto(invoice);
     }
     
-    public void deleteInvoice(String id) {
+    public void deleteInvoice(Long id) {
         if (!invoiceRepository.existsById(id)) {
             throw new ResourceNotFoundException("Invoice not found with id: " + id);
         }

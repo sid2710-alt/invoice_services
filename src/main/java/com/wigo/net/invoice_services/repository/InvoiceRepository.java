@@ -9,4 +9,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     public void deleteById(String id);
 
     public boolean existsById(String id);
+
+    public Invoice findById(String id);
 }
