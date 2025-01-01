@@ -39,6 +39,7 @@ public class InvoiceMapper {
         invoice.setItems(dto.getItems().stream()
                 .map(InvoiceMapper::toItemEntity)
                 .collect(Collectors.toList()));
+        invoice.setDate(dto.getDate());       
         return invoice;
     }
 
