@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ItemDto {
+    private long id;
     private String name;
     private int quantity;
     private double price;
+    private String description;
 }

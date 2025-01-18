@@ -46,5 +46,12 @@ public class Invoice {
 
     @Column(name = "total_amount", nullable = false)
     private double totalAmount;
+
+    public void addItems(List<Item> items) {
+        this.items.addAll(items);
+    }
+    public void clearItems() {
+        this.items.clear();
+    }
 }
 

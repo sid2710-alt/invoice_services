@@ -12,6 +12,7 @@ public class InvoiceMapper {
     // Convert Invoice to InvoiceDTO
     public static InvoiceDto toDto(Invoice invoice) {
         return InvoiceDto.builder()
+                .id(invoice.getId())
                 .clientName(invoice.getClientName())
                 .amount(invoice.getItems().stream()
                         .mapToDouble(item -> item.getQuantity() * item.getPrice())
@@ -26,9 +27,11 @@ public class InvoiceMapper {
     // Convert Item to ItemDTO
     private static ItemDto toItemDto(Item item) {
         return ItemDto.builder()
+                .id(item.getId())
                 .name(item.getName())
                 .quantity(item.getQuantity())
                 .price(item.getPrice())
+                .description(item.getDescription())
                 .build();
     }
 
@@ -49,6 +52,7 @@ public class InvoiceMapper {
         Item.setName(dto.getName());
         Item.setQuantity(dto.getQuantity());
         Item.setPrice(dto.getPrice());
+        Item.setDescription(dto.getDescription());
         return Item;
     }
 }

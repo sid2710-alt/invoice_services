@@ -30,11 +30,12 @@ public class InvoiceService {
     public Long updateInvoice(Long id, InvoiceDto updatedInvoiceDto) {
         Invoice existingInvoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with ID: " + id));
-                Invoice updatedInvoice = InvoiceMapper.toEntity(updatedInvoiceDto);
+        Invoice updatedInvoice = InvoiceMapper.toEntity(updatedInvoiceDto);
         
         existingInvoice.setClientName(updatedInvoice.getClientName());
         existingInvoice.setDate(updatedInvoice.getDate());
-        existingInvoice.setItems(updatedInvoice.getItems());
+        existingInvoice.clearItems(); // Clear the existing items
+        existingInvoice.addItems(updatedInvoice.getItems());
         existingInvoice.setTotalAmount(updatedInvoice.getTotalAmount());
 
         Invoice savedInvoice = invoiceRepository.save(existingInvoice);

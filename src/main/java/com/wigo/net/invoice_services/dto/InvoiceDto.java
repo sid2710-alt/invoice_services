@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class InvoiceDto {
+    private Long id;
     private String clientName;
     private double amount; // Calculated from items
     private Date date;
     private List<ItemDto> items;
+    
 }
