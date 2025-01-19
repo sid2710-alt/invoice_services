@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -40,8 +39,7 @@ public class Invoice {
     @Column(name = "invoice_date") // Explicit column name for date
     private Date date;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "invoice_id") // Foreign key column in `items` table
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="invoice") // Foreign key column in `items` table
     private List<Item> items;
 
     @Column(name = "total_amount", nullable = false)
