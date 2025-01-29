@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wigo.net.invoice_services.dto.InvoiceDto;
+import com.wigo.net.invoice_services.model.User;
 import com.wigo.net.invoice_services.service.InvoiceService;
 
 @RestController
@@ -26,7 +29,9 @@ public class InvoiceController {
 
     @GetMapping
     public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
-        return ResponseEntity.ok(invoiceService.getAllInvoices()); // HTTP 200 OK with body
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(invoiceService.getAllInvoices(currentUser)); // HTTP 200 OK with body
     }
 
     // Get invoice by ID
@@ -39,7 +44,9 @@ public class InvoiceController {
     // Create a new invoice
     @PostMapping
     public ResponseEntity<Long> createInvoice(@RequestBody InvoiceDto invoice) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(invoiceService.createInvoice(invoice)); // HTTP 201 Created with body
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(invoiceService.createInvoice(invoice, currentUser)); // HTTP 201 Created with body
     }
 
     // Update an invoice

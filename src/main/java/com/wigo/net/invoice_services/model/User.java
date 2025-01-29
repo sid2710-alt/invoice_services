@@ -9,11 +9,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +32,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private Integer id;
 
     @Column(nullable = false)
@@ -49,6 +51,9 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> items;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

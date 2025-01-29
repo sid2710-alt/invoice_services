@@ -21,5 +21,4 @@ public class InvoiceDto {
     private double amount; // Calculated from items
     private Date date;
     private List<ItemDto> items;
-    
 }

@@ -1,5 +1,6 @@
 package com.wigo.net.invoice_services.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     public boolean existsById(Long id);
 
     public Optional<Invoice> findById(Long id);
+
+    public List<Invoice> findInvoicesByUserId(Integer id);
 }
